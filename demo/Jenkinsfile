@@ -9,7 +9,7 @@ pipeline {
                 stages {
                         stage('Checkout') {
                                 steps {
-                                        git branch: 'First_JenkinsProj_Java/demo', url: 'https://github.com/girishpote19/Jenkins-Projects.git'
+                                        git branch: 'First_JenkinsProj_Java', url: 'https://github.com/girishpote19/Jenkins-Projects.git'
 
                                         }
                                 }
