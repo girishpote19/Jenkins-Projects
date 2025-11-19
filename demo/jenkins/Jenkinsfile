@@ -1,37 +1,39 @@
 pipeline {
-        agent {
-                docker {
-                        image 'maven:3.9.4-eclipse-temurin-17'
-                        args '-v /root/.mr:/root/.m2'
-                        }
-                }
+    agent {
+        docker {
+            image 'maven:3.9.4-eclipse-temurin-17'
+            args '-v /root/.m2:/root/.m2'   // cache Maven repo
+        }
+    }
 
-                stages {
-                        stage('Checkout') {
-                                steps {
-                                        git branch: 'First_JenkinsProj_Java/demo', url: 'https://github.com/girishpote19/Jenkins-Projects.git'
+    stages {
+        stage('Checkout') {
+            steps {
+                git branch: 'First_JenkinsProj_Java',
+                    url: 'https://github.com/girishpote19/Jenkins-Projects.git'
+            }
+        }
 
-                                        }
-                                }
-                        stage('Test') {
-                                steps {
-                                        sh 'mvn test'
-                                        }
-                                }
-                        stage('Package') {
-                                steps {
-                                        sh 'mvn package -DskipTestes'
-                                        }
-                                }
-                        stage(Archive Artifact') {
-                                steps {
-                                        archiveArtifacts artifacts: 'target/*.war', fingerprint: true
-                                        }
-                                }
-                        stage('Deploy (practice)') {
-                                steps {
-                                        echo " I am able to deploy now will Dockerize it in Future"
-                                        }
-                                }
-                        }
+        stage('Test') {
+            steps {
+                dir('demo') {   // navigate to folder where pom.xml is
+                    sh 'mvn test'
                 }
+            }
+        }
+
+        stage('Package') {
+            steps {
+                dir('demo') {
+                    sh 'mvn clean package -DskipTests'
+                }
+            }
+        }
+
+        stage('Deploy (practice)') {
+            steps {
+                echo "✅ Build successful! Next step: Dockerize and deploy."
+            }
+        }
+    }
+}
