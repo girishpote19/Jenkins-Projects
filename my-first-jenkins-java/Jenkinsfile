@@ -15,12 +15,14 @@ pipeline {
 
         stage('Build & Test') {
             steps {
+		dir('my-first-jenkins-java')
                 sh 'mvn clean test'
             }
         }
 
         stage('Package') {
             steps {
+		dir('my-first-jenkins-java')
                 sh 'mvn clean package -DskipTests'
             }
         }
